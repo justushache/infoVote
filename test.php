@@ -1,6 +1,17 @@
 
 <html>
 
+<?php
+	include 'session.php';
+	session_start();
+	if(isset($_SESSION['id'])){
+		echo '<br>'.is_session_valid($_SESSION['id']).'<br>';
+		// $_SESSION['id'] $_SESSION['hash']
+	}else{
+		echo 'not set';
+	}
+?>
+
 <form action="#" method="post" enctype="multipart/form-data">
 	<input type="file" name="fileToUpload" id="fileToUpload">
 	<input type="submit" value="Upload">

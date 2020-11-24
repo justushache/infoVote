@@ -12,7 +12,10 @@
     <a class="nav-link active" href="#">Homepage</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link" href="/newUser.php">Cart</a>
+    <a class="nav-link" href="/addItem.php">add Item</a>
+  </li>
+  <li class="nav-item  justify-content-end">
+    <a class="nav-link" href="/index.php">Login</a>
   </li>
 </ul>
 
