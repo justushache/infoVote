@@ -12,6 +12,9 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
+    <a class="nav-link" href="/shop.php">Homepage</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link active" href="#">Login</a>
   </li>
   <li class="nav-item">
@@ -36,27 +39,10 @@
 
 </content>
 <?php
-	if(!(isset($_POST["recaptcha_challenge_field"])&&isset($_POST["recaptcha_response_field"]))){
-		die('echo die;');
-	}
-  require_once('recaptchalib.php');
-  $privatekey = "6LejgesZAAAAABTakQ1VEJxl8PkAIQVNLJz82h1B";
-  $resp = recaptcha_check_answer ($privatekey,
-                                $_SERVER["REMOTE_ADDR"],
-                                $_POST["recaptcha_challenge_field"],
-                                $_POST["recaptcha_response_field"]);
-
-  if (!$resp->is_valid) {
-    // What happens when the CAPTCHA was entered incorrectly
-    die ("The reCAPTCHA wasn't entered correctly. Go back and try it again." .
-         "(reCAPTCHA said: " . $resp->error . ")");
-  } else {
-    // Your code here to handle a successful verification
-  }
 
 if(isset($_POST["name"])&&isset($_POST["password"])){
-	$username = $_POST["name"];
-    $userPassword = $_POST["password"];
+$username = $_POST["name"];
+$userPassword = $_POST["password"];
 $servername = "localhost";
 $serverusername = "root";
 $password = "";

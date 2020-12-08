@@ -7,7 +7,7 @@
 		$fetched = $result->fetch();
 		$millisCreated =  (float)$fetched['millisCreated'];
 		$millis = microtime(true);
-		if($millis-$millisCreated>30){
+		if($millis-$millisCreated>1800){
 			return false;
 		}else{
 			return true;

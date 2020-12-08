@@ -45,29 +45,46 @@
 
 <?php
   if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])){
-    echo ($_POST["name"]);
-	//save img as millis+productname.dateiextension
 
-	$target_dir = "uploads";
-	$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-	$uploadOk = 1;
-	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-	$imagepath = round(microtime(true)*1000).$_POST["name"].".".$imageFileType;
-	if(move_uploaded_file($_FILES['fileToUpload']['tmp_name'],"$target_dir/".$imagepath)==false){
-		echo "we had an error";
-	}
-	
-	//save image name
-    $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
-    $sql = 'INSERT INTO products (name, manufacturer,number,description,imagepath,homepage) VALUES ("'
-	.$_POST["name"].'","'
-	.$_POST["manufacturer"].'","'
-	.$_POST["number"].'","'
-	.$_POST["description"].'","'
-	.$imagepath.'","'
-	.$_POST["homepage"].'")';
+    //check if log in was performed
+    session_start();
+    if(!isset($_SESSION['id'])){
+      //TODO: redirect to login page
+      die('please log in first');
+    }
+
+    //check if session is valid
+    include 'session.php';
+    if(is_session_valid($_SESSION['id'])!=true){
+      //TODO: redirect to login page
+      die('Sie wurden automatisch ausgeloggt');
+    }
+
+    //gey uid
+    $uid = $_SESSION['uid'];
+
+	  //save img as millis+productname.dateiextension
+	  $target_dir = "uploads";
+	  $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+	  $uploadOk = 1;
+	  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+	  $imagepath = round(microtime(true)*1000).$_POST["name"].".".$imageFileType;
+	  if(move_uploaded_file($_FILES['fileToUpload']['tmp_name'],"$target_dir/".$imagepath)==false){
+	  	echo "we had an error";
+	  }
+  
+	  //add product to database
+      $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
+      $sql = 'INSERT INTO products (name, uid,number,description,imagepath,homepage) VALUES ("'
+	  .$_POST["name"].'","'
+	  .$uid.'","'
+	  .$_POST["number"].'","'
+	  .$_POST["description"].'","'
+	  .$imagepath.'","'
+	  .$_POST["homepage"].'")';
     $pdo->query($sql);
-    echo ($sql);
+    
+    //TODO: redirect to shop.php
   }else{
 	  echo("not all field are populated");
   }

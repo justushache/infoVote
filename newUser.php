@@ -8,6 +8,9 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
+    <a class="nav-link" href="/shop.php">Homepage</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="/index.php">Login</a>
   </li>
   <li class="nav-item">

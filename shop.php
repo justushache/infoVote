@@ -30,22 +30,30 @@ echo '<div class="container-fluid pl-5 pr-5">';
 
 for($i=0;$i<count($rows);$i+=1){
 
-if($i%3 == 0)
-    echo'<div class="row mr-5 ml-5 mt-3 mb-0">';
-echo  '
-<div class="col-lg-4">
-<div class="card h-100">
-  <div class="card-body">
-    <h5 class="card-title">'.$rows[$i]["name"].'</h5>
-    <h6 class="card-subtitle mb-2 text-muted">'.$rows[$i]["manufacturer"].'</h6>
-    <p class="card-text">'.$rows[$i]["description"].'</p>
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
-  </div>
-  </div>
-</div>';
+  // get username to uid for the row
+  $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
+  $sql = 'SELECT name FROM users WHERE ID ='.$rows[$i]["uid"];
+  $manufacturer = $pdo->query($sql)->fetch()[0];
 
-if($i%3 == 2|| $i == count($rows)-1)
+  //start a new row every 3 cards
+  if($i%3 == 0)
+        echo'<div class="row mr-5 ml-5 mt-3 mb-0">';
+  //show the card
+  echo  '
+  <div class="col-lg-4">
+    <div class="card h-100 w-100">
+    <img src="uploads/'.$rows[$i]["imagepath"].'" class="img-fluid w-100" alt="Product image">
+      <div class="card-body w-100">
+        <h5 class="card-title">'.$rows[$i]["name"].'</h5>
+        <h6 class="card-subtitle mb-2 text-muted">'.$manufacturer.'</h6>
+        <p class="card-text">'.$rows[$i]["description"].'</p>
+        <a href="'.$rows[$i]['homepage'].'" class="card-link">Website</a>
+        <a href="#" class="card-link float-right">More</a>
+      </div>
+    </div>
+  </div>';
+  //end the row
+  if($i%3 == 2|| $i == count($rows)-1)
     echo '</div>';
 }
 
