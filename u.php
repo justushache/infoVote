@@ -8,19 +8,73 @@
 <body style='padding:15'>
 <ul class="nav nav-tabs mb-2">
   <li class="nav-item">
-    <a class="nav-link active" href="#">Homepage</a>
+    <a class="nav-link" href="/shop.php">Homepage</a>
   </li>
   <li class="nav-item  justify-content-end">
     <a class="nav-link" href="/addItem.php">add Item</a>
   </li>
-  <?php include 'currentUser.php'; echo getUserNavbar()?>  
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Benutzer</a>
+  </li>
+  <?php include_once 'currentUser.php'; echo getUserNavbar()?>  
 </ul>
 
 
 <div class="container-fluid pl-5 pr-5">
 <?php
-$user = getUser();
-echo "<center><h1>$user[0]</h1></center>";
+if(isset($_GET['uid'])){
+  $uid = $_GET['uid'];
+  $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
+
+  //chek if the uid is valid and get the username
+  $sql = "SELECT name FROM users WHERE ID='$uid'";
+
+  $username = $pdo->query($sql)->fetchAll()[0][0];
+
+  echo "<center><h1><b>$username</b></h1></center>";
+
+  //list all projects of the user
+$sql = "SELECT * FROM products where uid='$uid'";
+$rows = $pdo->query($sql)->fetchAll();
+
+// The same code used in the shop page
+// TODO: put it in some kind of function to prevent duplicate code
+echo '<div class="container-fluid pl-5 pr-5">';
+echo "<h4>$username hat diese Projekte:</h4>";
+
+for($i=0;$i<count($rows);$i+=1){
+
+  // get username to uid for the row
+  $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
+  $sql = 'SELECT name FROM users WHERE ID ='.$rows[$i]["uid"];
+  $manufacturer = $pdo->query($sql)->fetch()[0];
+
+  //start a new row every 3 cards
+  if($i%2 == 0)
+        echo'<div class="row mr-5 ml-5 mt-3 mb-0">';
+  //show the card
+  echo  '
+  <div class="col-lg-6">
+    <div class="card h-100 w-100">
+      <div style="position:relative; padding-top: 56%;">
+        <img src="uploads/'.$rows[$i]["imagepath"].'" class="img-fluid" alt="Product image" style="position:absolute;top:0;object-fit: cover;width:100%;height:100%">
+      </div >
+      <div class="card-body w-100">
+        <h5 class="card-title">'.$rows[$i]["name"].'</h5>
+        <h6 class="card-subtitle mb-2 text-muted">'.$manufacturer.'</h6>
+        <p class="card-text">'.$rows[$i]["description"].'</p>
+        <a href="'.$rows[$i]['homepage'].'" class="card-link">Website</a>
+        <a href="#" class="card-link float-right">More</a>
+      </div>
+    </div>
+  </div>';
+  //end the row
+  if($i%2 == 1|| $i == count($rows)-1)
+    echo '</div>';
+}
+
+echo '</div>';
+}
 ?>
 <div>
 

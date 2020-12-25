@@ -1,5 +1,5 @@
 <?php
-    // set uid and username variables to ther respectative value, if there is no valid user these variables wont be initialized
+    //returns '' if the user didnt sign in, else returns an array with {uid,username}
     function getUser(){
 
         if(session_id() == '' || !isset($_SESSION)) {
@@ -13,7 +13,7 @@
         }
     
         //check if session is valid
-        include 'session.php';
+        include_once 'session.php';
         if(is_session_valid($_SESSION['id'])!=true){
           return '';
         }

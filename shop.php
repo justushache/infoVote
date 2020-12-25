@@ -45,10 +45,10 @@ for($i=0;$i<count($rows);$i+=1){
       </div >
       <div class="card-body w-100">
         <h5 class="card-title">'.$rows[$i]["name"].'</h5>
-        <h6 class="card-subtitle mb-2 text-muted">'.$manufacturer.'</h6>
+        <a href="/u.php?uid='.$rows[$i]["uid"].'" class="card-link">'.$manufacturer.'</a>
         <p class="card-text">'.$rows[$i]["description"].'</p>
         <a href="'.$rows[$i]['homepage'].'" class="card-link">Website</a>
-        <a href="#" class="card-link float-right">More</a>
+        <a href="/p.php?pid='.$rows[$i]['ID'].'" class="card-link float-right">More</a>
       </div>
     </div>
   </div>';
