@@ -20,7 +20,7 @@
 
 <content style='margin:15'>
 
-<form>
+<form method="POST">
   <div class="form-group">
     <label for="name">Username</label>
     <input type="text" class="form-control" name="name" aria-describedby="emailHelp">
@@ -37,9 +37,9 @@
 </content>
 
 <?php
-if(isset($_GET["name"])&&isset($_GET["password"])){
-	$username = $_GET["name"];
-    $userPassword = $_GET["password"];
+if(isset($_POST["name"])&&isset($_POST["password"])){
+	$username = $_POST["name"];
+    $userPassword = $_POST["password"];
 $servername = "localhost";
 $serverusername = "root";
 $password = "";
@@ -53,33 +53,26 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "SELECT password,ID FROM `users`";
+//check if username exists
+$sql = "SELECT password,ID FROM `users` WHERE name='$username'";
 $result = $conn->query($sql);
-
-$valid = true;
-if($result){
-foreach($result as $entry){
-	if(password_verify($userPassword,$entry["password"])){
-		$name = $conn->query("SELECT name FROM users WHERE ID='".$entry["ID"]."'")->fetch_all(MYSQLI_ASSOC)[0]["name"];
-		echo "the password '".$userPassword."' is already taken by '".$name."'<br>";
-		$valid = false;
-	}
-}
-}else{
-	echo"error";
-}
-if(!$valid){
-	die();
+if($result->num_rows >0){
+  die('your username is already taken');
 }
 
+//insert user into database
 $hashedPassword = password_hash($userPassword,PASSWORD_BCRYPT );
 $sql = "INSERT INTO users(name,password) VALUES('".$username."','".$hashedPassword."')";
 $result = $conn->query($sql);
 
 if($result){
-	echo"userCreated";
+  echo"userCreated";
+  include 'session.php';
+  //TODO: create a new session
+	createSession($username,$userPassword);
+  header("Location: /shop.php");
 }else{
-	echo"error";
+	echo"Ihr Benutzer konnte leider nicht angelegt werden";
 }
 
 $conn->close();

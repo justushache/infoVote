@@ -39,56 +39,17 @@
 
 </content>
 <?php
-
-if(isset($_POST["name"])&&isset($_POST["password"])){
-$username = $_POST["name"];
-$userPassword = $_POST["password"];
-$servername = "localhost";
-$serverusername = "root";
-$password = "";
-$dbname = "signin";
-
-// Create connection
-$conn = new mysqli($servername, $serverusername, $password,$dbname);
-
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-} 
-
-$sql = "SELECT password, ID FROM `users` WHERE name = '".$username."'";
-$result = $conn->query($sql);
-
-if($result && $result->num_rows>0){
-    $result->fetch_all(MYSQLI_ASSOC);
-}
-
-foreach($result as $row){
-		$string = $row["password"];
-		$id = $row["ID"];
-		$hashedPassword = password_hash($userPassword,PASSWORD_BCRYPT );
-		if(password_verify($userPassword,$string)){
-			echo "loged in";
-			//TODO: get millis
-			echo "user id:".$id;
-			$millis = microtime(true);
-			//TODO: hash uname+millis for session-hash
-			$hashedString = hash("sha1",$username.$millis);
-			echo "<br> millis:".$millis. " hash:". $hashedString."<br>";
-			//TODO: add session to db
-			$pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
-			$sql = "INSERT INTO sessions (hash,uid,millisCreated) VALUES('$hashedString','$id','$millis')";
-			echo $sql;
-			$pdo->query($sql);
-			session_start();
-			$_SESSION['id']=$hashedString;
-			$_SESSION['uid']=$id;
+	if(isset($_POST['name']) && isset($_POST['password'])){
+		include 'session.php';
+		if(createSession($_POST['name'],$_POST['password'])){
+			header('Location: /shop.php');
+		}else{
+			echo 'your username or password is wrong';
+		}
+	//IF the user has only filled out one field, tell him that
+	}elseif(isset($_POST['name']) || isset($_POST['password'])){
+		echo'sie haben nicht alle Felder ausgefüllt';
 	}
-	echo "<br>";
-	}
-
-$conn->close();
-}
 ?>
 
 

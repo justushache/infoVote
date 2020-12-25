@@ -7,6 +7,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 <body style='padding:15'>
 
+
+
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a class="nav-link" href="/shop.php">Homepage</a>
@@ -14,50 +16,56 @@
   <li class="nav-item  justify-content-end">
     <a class="nav-link active" href="">add Item</a>
   </li>
+  <?php include 'currentUser.php'; echo getUserNavbar()?>  
 </ul>
 
 
 <form action="#" method="post" enctype="multipart/form-data">
-	<input type="file" name="fileToUpload" id="fileToUpload">
-	<input type="submit" value="Upload">
-  <div class="form-group">
+<div class="input-group pt-3 w-75 mx-auto">
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="fileToUpload" name="fileToUpload">
+    <label class="custom-file-label" for="fileToUpload">Choose file</label>
+  </div>
+
+  <div class="form-group w-100 pt-1">
     <label for="name">Name</label>
     <input type="text" class="form-control" name="name">
   </div>
-  <div class="form-group">
+  <div class="form-group w-100 pt-1">
     <label for="manufacturer">manufacturer</label>
     <input type="text" class="form-control" name="manufacturer">
   </div>
-  <div class="form-group">
+  <div class="form-group w-100 pt-1">
     <label for="number">Number</label>
     <input type="number" class="form-control" name="number">
   </div>
-  <div class="form-group">
+  <div class="form-group w-100 pt-1">
     <label for="description">Description</label>
     <input type="text" class="form-control" name="description">
   </div>
-  <div class="form-group">
+  <div class="form-group w-100 pt-1">
     <label for="homepage">Homepage.php</label>
     <input type="text" class="form-control" name="homepage">
   </div>
   <button type="submit" class="btn btn-primary">Add a new item</button>
+</div>
 </form>
 
 <?php
-  if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])){
+  if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])&&$_FILES["fileToUpload"]){
 
     //check if log in was performed
     session_start();
     if(!isset($_SESSION['id'])){
-      //TODO: redirect to login page
-      die('please log in first');
+      header('Location: /index.php');
+      die('bitte erst anmelden');
     }
 
     //check if session is valid
     include 'session.php';
     if(is_session_valid($_SESSION['id'])!=true){
-      //TODO: redirect to login page
-      die('Sie wurden automatisch ausgeloggt');
+      header('Location: /index.php');
+      die('sie wurden automatisch abgemeldet');
     }
 
     //gey uid
@@ -84,10 +92,19 @@
 	  .$_POST["homepage"].'")';
     $pdo->query($sql);
     
-    //TODO: redirect to shop.php
+    // redirect to shop.php
+    header('Location: /shop.php');
   }else{
 	  echo("not all field are populated");
   }
 ?>
+
+
+<script type="application/javascript">
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        $('.custom-file-label').html(fileName);
+    });
+</script>
 
 </html>
