@@ -13,10 +13,13 @@
   <li class="nav-item  justify-content-end">
     <a class="nav-link" href="/addItem.php">add Item</a>
   </li>
-  <?php include 'currentUser.php'; echo getUserNavbar()?>  
+  <?php include_once 'currentUser.php'; echo getUserNavbar()?>  
 </ul>
 
 <?php
+include_once 'star.php';
+echo getStarCSS();
+
 $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
 //TODO: if the voting system is implemented, sort by votes
@@ -29,6 +32,7 @@ echo '<div class="container-fluid pl-5 pr-5">';
 for($i=0;$i<count($rows);$i+=1){
 
   // get username to uid for the row
+  $row = $rows[$i];
   $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
   $sql = 'SELECT name FROM users WHERE ID ='.$rows[$i]["uid"];
   $manufacturer = $pdo->query($sql)->fetch()[0];
@@ -37,21 +41,24 @@ for($i=0;$i<count($rows);$i+=1){
   if($i%3 == 0)
         echo'<div class="row mr-5 ml-5 mt-3 mb-0">';
   //show the card
-  echo  '
-  <div class="col-lg-4">
-    <div class="card h-100 w-100">
-      <div style="position:relative; padding-top: 56%;">
-        <img src="uploads/'.$rows[$i]["imagepath"].'" class="img-fluid" alt="Product image" style="position:absolute;top:0;object-fit: cover;width:100%;height:100%">
+  echo  "
+  <div class='col-lg-4'>
+    <div class='card h-100 w-100'>
+      <div style='position:relative; padding-top: 56%;'>
+        <img src='uploads/$row[imagepath].' class='img-fluid' alt='Product image' style='position:absolute;top:0;object-fit: cover;width:100%;height:100%'>
       </div >
-      <div class="card-body w-100">
-        <h5 class="card-title">'.$rows[$i]["name"].'</h5>
-        <a href="/u.php?uid='.$rows[$i]["uid"].'" class="card-link">'.$manufacturer.'</a>
-        <p class="card-text">'.$rows[$i]["description"].'</p>
-        <a href="'.$rows[$i]['homepage'].'" class="card-link">Website</a>
-        <a href="/p.php?pid='.$rows[$i]['ID'].'" class="card-link float-right">More</a>
+      <div class='card-body w-100'>
+        <div class='row'>
+          <h5 class='col-8 my-1 card-title'>$row[name]</h5>
+          <div class='col-4'>".getStarHTMLToShow($row['ID'])."</div>
+        </div>
+        <a href='/u.php?uid=$row[uid]' class='card-link'>$manufacturer</a>
+        <p class='card-text'>$row[description]</p>
+        <a href='$row[homepage]' class='card-link'>Website</a>
+        <a href='/p.php?pid=$row[ID]' class='card-link float-right'>More</a>
       </div>
     </div>
-  </div>';
+  </div>";
   //end the row
   if($i%3 == 2|| $i == count($rows)-1)
     echo '</div>';

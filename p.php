@@ -35,13 +35,58 @@ if(isset($_GET['pid'])){
   $sql = "SELECT name FROM users WHERE ID='$project[uid]'";
   $username = $pdo->query($sql)->fetchAll()[0][0];
 
+  // the project name
   echo "<center><h1><b><u>$project[name]</u> von $username</b></h1></center>";
-  echo  "<div style='position:relative' class='mb-3'>
-            <img src='uploads/$project[imagepath]' class='img-fluid' alt='Product image' style='top:0;object-fit:cover;width:100%'>
-        </div>
-        <h3>Beschreibung des Autors:</h3>
-        <p>$project[description]</p>
-        <a href='$project[homepage]' class='btn btn-primary stretched-link'>Zu der Website</a>";
+
+  //a row containing the image and the professional descriptions
+  echo "<div class='row'>";
+
+    //container to display image and opinions of other users under the image
+    echo "<div class='col-7'>";
+        //the image of the project
+        echo  "<div style='position:relative' class='row-sm'>
+                    <img src='uploads/$project[imagepath]' class='img-fluid' alt='Product image' style='top:0;object-fit:cover;width:100%'>
+                </div>";
+        //display the opinions of other users
+        $sql = "SELECT uid,name, title, review FROM reviews INNER JOIN users ON reviews.uid=users.ID WHERE pid = $pid ";
+        $reviews = $pdo->query($sql)->fetchAll();
+        for($i=0;$i<count($reviews);$i+=1){
+            $p = $reviews[$i];
+            //TODO: display how many stars the user voted
+            echo "  <div class='card my-2 p-3'>
+                        <h3>$p[title]</h3>
+                        <a href='/u.php?uid=$p[uid]' class='card-link'>$p[name]</a>
+                        <p>$p[review]</p>
+                    </div>";
+        }
+    echo "</div>";
+
+    //TODO: display above image, if space gets to small
+    // a col containing the description of the maker and the opinion of the admin
+    echo "<div class='col-5'>";
+            //the description of the maker
+                echo    "<div class='card col-sm my-2'>
+                            <h3>Beschreibung des Autors:</h3>
+                            <p>$project[description]</p>
+                     </div>";
+            //the opinion of the adimins
+            //TODO: add stars to display the conclusion of the administrator
+            echo    "<div class='card col-sm my-2'>
+                        <h3>Beschreibung des Autors:</h3>
+                        <p>$project[description]</p>
+                        <h3>Bewertung der Administratoren:</h3>
+                        <p>wir findens ganz toll</p>
+                    </div>";
+            //a row with buttons to write a review (new page) and to go to the website
+            echo    "<div class='card col-sm'>
+                        <div class='row'>
+                            <a href='$project[homepage]' class='col btn btn-primary m-2'>Zu der Website</a>
+                            <a href='/v.php?pid=$project[ID]' class='col btn btn-primary m-2'>Review schreiben</a>
+                        </div>
+                    </div>";
+    echo "</div>";
+  
+  echo "</div>";
 }
 ?>
 <div>

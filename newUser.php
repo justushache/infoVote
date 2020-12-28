@@ -68,7 +68,7 @@ $result = $conn->query($sql);
 if($result){
   echo"userCreated";
   include 'session.php';
-  //TODO: create a new session
+  //create a new session
 	createSession($username,$userPassword);
   header("Location: /shop.php");
 }else{

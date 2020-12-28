@@ -95,6 +95,7 @@
     // redirect to shop.php
     header('Location: /shop.php');
   }else{
+    //TODO: only display error, if user sent data
 	  echo("not all field are populated");
   }
 ?>
