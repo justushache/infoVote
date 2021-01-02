@@ -38,7 +38,6 @@ $sql = "SELECT * FROM products where uid='$uid'";
 $rows = $pdo->query($sql)->fetchAll();
 
 // The same code used in the shop page
-// TODO: put it in some kind of function to prevent duplicate code
 echo '<div class="container-fluid pl-5 pr-5">';
 echo "<h4>$username hat diese Projekte:</h4>";
 

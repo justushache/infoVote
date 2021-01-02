@@ -37,7 +37,6 @@ function getStarHTMLToVote($pid){
     echo "<div class='rating'>";
         // echo each star as a radio buttion
         //check, if user is signed in, if not set color to grey, disable
-        //TODO: maybe check the number of stars the user already gave
         include_once 'currentUser.php';
         $disabled = 'disabled';
         $color = "style='color:grey'";
@@ -53,15 +52,9 @@ function getStarHTMLToVote($pid){
     echo "</div>";
 }
 
-function getStarHTMLToShow($pid){
-
+function getStarHTMLToShow($stars){
     $html= "<div class='rating'>";
-        //get the average number of stars for this project
-        $PDO = new PDO('mysql:host=localhost;dbname=signin', 'root','');
-        $sql = "SELECT AVG(stars) FROM stars WHERE pid = $pid";
-        $stars =$PDO->query($sql)->fetchAll()[0][0] ;
-
-        // echo the stars, which are coresponding  to the current value 
+        // echo the stars, which are coresponding  to the current value
         for($i=5;$i>0;$i--){
             if($i>$stars){
                 $lbl = '☆';
@@ -73,6 +66,7 @@ function getStarHTMLToShow($pid){
     $html=$html."</div>";
     return $html;
 }
+
 
 function getStarCSS()
 {

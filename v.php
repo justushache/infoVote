@@ -28,8 +28,16 @@
 </ul>
 
 <?php
-    //TODO: display project-title
-    echo "<h2 class='text-center m-2'>Platzhalterprojekttitel</h2>"
+    //display project-title
+    if(isset($_GET['pid'])){
+        $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
+        $sql = "SELECT name FROM products WHERE ID = $_GET[pid]";
+        $res = $pdo->query($sql);
+        if($res){
+            $n = $res->fetch()[0];
+            echo "<h2 class='text-center m-2'>Neues Review zu $n</h2>";
+        }
+    }
 ?>
 
 <form action="#" method="post" enctype="multipart/form-data">
@@ -80,7 +88,7 @@
     //check if the user didnt write a review already  
     $sql = "SELECT ID from reviews WHERE uid ='$uid' AND pid = '$pid'";
     if($pdo->query($sql)->rowCount()>0){
-        echo 'sie dürfen nur ein Review pro Produkt schreiben';
+        die ('sie dürfen nur ein Review pro Produkt schreiben');
     };
 
     //put uid, title, review and pid in the database,
@@ -90,6 +98,7 @@
 	  .$_POST["review"].'","'
 	  .$pid.'")';
     $pdo->query($sql);
+    echo "<script>alert('HI')</script>";
     
     //redirect to the projekt
     header('Location: /shop.php');

@@ -16,7 +16,7 @@
   <li class="nav-item  justify-content-end">
     <a class="nav-link active" href="">add Item</a>
   </li>
-  <?php include 'currentUser.php'; echo getUserNavbar()?>  
+  <?php include_once 'currentUser.php'; echo getUserNavbar()?>  
 </ul>
 
 
@@ -52,17 +52,24 @@
 </form>
 
 <?php
-  if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])&&$_FILES["fileToUpload"]){
+  if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])&&$_FILES["fileToUpload"]&&
+    $_POST["name"]!=''&&$_POST["manufacturer"]!=''&&$_POST["number"]!=''&&$_POST["description"]!=''&&$_POST["homepage"]){
+    //for some reason empty fields are now empty strings, so check for that
 
     //check if log in was performed
-    session_start();
+    
+    if(session_id() == '' || !isset($_SESSION)) {
+      // session isn't started
+      session_start();
+    }
+    
     if(!isset($_SESSION['id'])){
       header('Location: /index.php');
       die('bitte erst anmelden');
     }
 
     //check if session is valid
-    include 'session.php';
+    include_once 'session.php';
     if(is_session_valid($_SESSION['id'])!=true){
       header('Location: /index.php');
       die('sie wurden automatisch abgemeldet');
@@ -94,8 +101,8 @@
     
     // redirect to shop.php
     header('Location: /shop.php');
-  }else{
-    //TODO: only display error, if user sent data
+  }elseif(isset($_POST["name"])||isset($_POST["manufacturer"])||isset($_POST["number"])||isset($_POST["description"])||isset($_POST["homepage"])||isset($_FILES["fileToUpload"])){
+    //only display error, if user sent data
 	  echo("not all field are populated");
   }
 ?>
