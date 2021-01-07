@@ -24,8 +24,10 @@ $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
 //sort by votes
 $sqlPrep = "CREATE TEMPORARY TABLE a SELECT products.ID, stars.stars as adminStars FROM products INNER JOIN stars ON products.ID = stars.pid LEFT JOIN admin ON admin.uid = stars.uid WHERE admin.uid IS NOT NULL;
+        CREATE TEMPORARY TABLE a1 SELECT * FROM a;
         CREATE TEMPORARY TABLE u SELECT products.ID, stars.stars as userStars FROM products INNER JOIN stars ON products.ID = stars.pid LEFT JOIN admin ON admin.uid = stars.uid WHERE admin.uid IS NULL;
-        CREATE TEMPORARY TABLE p SELECT a.ID as aID, u.ID as uID, adminStars,userStars FROM a LEFT JOIN u ON u.ID = a.ID UNION SELECT a.ID as aID, u.ID as uID, adminStars,userStars FROM a RIGHT JOIN u ON u.ID = a.ID;
+        CREATE TEMPORARY TABLE u1 SELECT * FROM u;
+        CREATE TEMPORARY TABLE p SELECT a.ID as aID, u.ID as uID, adminStars,userStars FROM a LEFT JOIN u ON u.ID = a.ID UNION SELECT a1.ID as aID, u1.ID as uID, adminStars,userStars FROM a1 RIGHT JOIN u1 ON u1.ID = a1.ID;
         UPDATE p SET aID = uID, adminStars = userStars WHERE aID IS NULL;
         UPDATE p SET uID = aID, userStars = adminStars WHERE uID IS NULL;";
 $sql = "SELECT * FROM products LEFT JOIN (SELECT aid as pid, (adminStars+userStars)/2 as avgStars FROM p)t ON t.pid = products.ID ORDER BY t.avgStars DESC;";
