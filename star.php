@@ -2,6 +2,8 @@
 //this is a file, soly to echo the html to create the voting stars and to store changes of stars in the db
 //when there is a valid post entry of pid, sid and stars with a number between 1 and 5, this file will store the values in a db
 
+include_once 'validateInputText.php';
+
 if(isset($_POST['pid'])&&isset($_POST['stars'])){
     echo '<br>ALL VARIABLES SET<br>';
     $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root','');
@@ -12,8 +14,8 @@ if(isset($_POST['pid'])&&isset($_POST['stars'])){
         die('no valid user');
     }
     $uid = $usr[0];
-    $pid = $_POST['pid'];
-    $stars = $_POST['stars'];
+    $pid = removeCriticalText($_POST['pid']);
+    $stars = removeCriticalText($_POST['stars']);
 
     // check, if the user did already vote
     $sql =  "SELECT ID from stars WHERE pid = $pid AND uid = $uid";

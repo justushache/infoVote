@@ -12,13 +12,13 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="/shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Homepage</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Login</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/newUser.php">Add User</a>
+    <a class="nav-link" href="newUser.php">Add User</a>
   </li>
 </ul>
 
@@ -39,15 +39,16 @@
 
 </content>
 <?php
-	if(isset($_POST['name']) && isset($_POST['password'])){
+  include_once 'validateInputText.php';
+	if(isset($_POST['name']) && removeCriticalText($_POST['name']) != '' && isset($_POST['password']) && removeCriticalText($_POST['password'])){
 		include 'session.php';
-		if(createSession($_POST['name'],$_POST['password'])){
-			header('Location: /shop.php');
+		if(createSession(removeCriticalText($_POST['name']), removeCriticalText($_POST['password']))){
+			header('Location: shop.php');
 		}else{
 			echo 'your username or password is wrong';
 		}
 	//IF the user has only filled out one field, tell him that
-	}elseif(isset($_POST['name']) || isset($_POST['password'])){
+	}else{
 		echo'sie haben nicht alle Felder ausgefüllt';
 	}
 ?>

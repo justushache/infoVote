@@ -11,7 +11,7 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="/shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Homepage</a>
   </li>
   <li class="nav-item  justify-content-end">
     <a class="nav-link active" href="">add Item</a>
@@ -52,8 +52,9 @@
 </form>
 
 <?php
+ include_once 'validateInputText.php';
   if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])&&$_FILES["fileToUpload"]&&
-    $_POST["name"]!=''&&$_POST["manufacturer"]!=''&&$_POST["number"]!=''&&$_POST["description"]!=''&&$_POST["homepage"]){
+  removeCriticalText($_POST["name"])!=''&&removeCriticalText($_POST["manufacturer"])!=''&&removeCriticalText($_POST["number"])!=''&&removeCriticalText($_POST["description"])!=''&&removeCriticalText($_POST["homepage"])){
     //for some reason empty fields are now empty strings, so check for that
 
     //check if log in was performed
@@ -64,14 +65,14 @@
     }
     
     if(!isset($_SESSION['id'])){
-      header('Location: /index.php');
+      header('Location: index.php');
       die('bitte erst anmelden');
     }
 
     //check if session is valid
     include_once 'session.php';
     if(is_session_valid($_SESSION['id'])!=true){
-      header('Location: /index.php');
+      header('Location: index.php');
       die('sie wurden automatisch abgemeldet');
     }
 
@@ -91,16 +92,16 @@
 	  //add product to database
       $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
       $sql = 'INSERT INTO products (name, uid,number,description,imagepath,homepage) VALUES ("'
-	  .$_POST["name"].'","'
+	  .removeCriticalText($_POST["name"]).'","'
 	  .$uid.'","'
-	  .$_POST["number"].'","'
-	  .$_POST["description"].'","'
+	  .removeCriticalText($_POST["number"]).'","'
+	  .removeCriticalText($_POST["description"]).'","'
 	  .$imagepath.'","'
-	  .$_POST["homepage"].'")';
+	  .removeCriticalText($_POST["homepage"]).'")';
     $pdo->query($sql);
     
     // redirect to shop.php
-    header('Location: /shop.php');
+    header('Location: shop.php');
   }elseif(isset($_POST["name"])||isset($_POST["manufacturer"])||isset($_POST["number"])||isset($_POST["description"])||isset($_POST["homepage"])||isset($_FILES["fileToUpload"])){
     //only display error, if user sent data
 	  echo("not all field are populated");

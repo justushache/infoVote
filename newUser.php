@@ -8,10 +8,10 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="/shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Homepage</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="/index.php">Login</a>
+    <a class="nav-link" href="index.php">Login</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Add User</a>
@@ -37,9 +37,11 @@
 </content>
 
 <?php
-if(isset($_POST["name"])&&isset($_POST["password"])){
-	$username = $_POST["name"];
-    $userPassword = $_POST["password"];
+include_once 'validateInputText.php';
+
+if(isset($_POST["name"])&&isset($_POST["password"])&&removeCriticalText($_POST["name"]) != ''&&removeCriticalText($_POST["password"]) != ''){
+	$username = removeCriticalText($_POST["name"]);
+    $userPassword = removeCriticalText($_POST["password"]);
 $servername = "localhost";
 $serverusername = "root";
 $password = "";
@@ -55,6 +57,7 @@ if ($conn->connect_error) {
 
 //check if username exists
 $sql = "SELECT password,ID FROM `users` WHERE name='$username'";
+echo $sql;
 $result = $conn->query($sql);
 if($result->num_rows >0){
   die('your username is already taken');
@@ -70,7 +73,7 @@ if($result){
   include 'session.php';
   //create a new session
 	createSession($username,$userPassword);
-  header("Location: /shop.php");
+  header("Location: shop.php");
 }else{
 	echo"Ihr Benutzer konnte leider nicht angelegt werden";
 }

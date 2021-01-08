@@ -16,10 +16,10 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="/shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Homepage</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link " href="/addItem.php">add Item</a>
+    <a class="nav-link " href="addItem.php">add Item</a>
   </li>
   <li class="nav-item  justify-content-end">
     <a class="nav-link active" href="">Review</a>
@@ -29,9 +29,11 @@
 
 <?php
     //display project-title
+    include_once 'validateInputText.php';
+    
     if(isset($_GET['pid'])){
         $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
-        $sql = "SELECT name FROM products WHERE ID = $_GET[pid]";
+        $sql = "SELECT name FROM products WHERE ID = " . removeCriticalText($_GET["pid"]);
         $res = $pdo->query($sql);
         if($res){
             $n = $res->fetch()[0];
@@ -68,20 +70,20 @@
 
     //check if log in was performed
     if(!isset($_SESSION['id'])){
-      header('Location: /index.php');
+      header('Location: index.php');
       die('bitte erst anmelden');
     }
 
     //check if session is valid
     include_once 'session.php';
     if(is_session_valid($_SESSION['id'])!=true){
-      header('Location: /index.php');
+      header('Location: index.php');
       die('sie wurden automatisch abgemeldet');
     }
 
     //gey uid
     $uid = $_SESSION['uid'];
-    $pid = $_GET['pid'];
+    $pid = removeCriticalText($_GET['pid']);
 
     $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
@@ -101,7 +103,7 @@
     echo "<script>alert('HI')</script>";
     
     //redirect to the projekt
-    header('Location: /shop.php');
+    header('Location: shop.php');
   }else{
 	  echo("not all field are populated");
   }

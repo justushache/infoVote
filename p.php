@@ -8,10 +8,10 @@
 <body class="bg-light">
 <ul class="nav nav-tabs mb-2 bg-white">
   <li class="nav-item">
-    <a class="nav-link" href="/shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Homepage</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link" href="/addItem.php">add Item</a>
+    <a class="nav-link" href="addItem.php">add Item</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Projekt</a>
@@ -22,8 +22,9 @@
 
 <div class="container-fluid w-75 bg-white">
 <?php
+include_once 'validateInputText.php';
 if(isset($_GET['pid'])){
-  $pid = $_GET['pid'];
+  $pid = removeCriticalText($_GET['pid']);
   $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
   //chek if the uid is valid and get the username
@@ -52,7 +53,7 @@ if(isset($_GET['pid'])){
         echo    "<div class='card col-sm my-2'>
             <div class='row'>
                 <a href='$project[homepage]' class='col btn btn-primary m-2'>Zu der Website</a>
-                <a href='/v.php?pid=$project[ID]' class='col btn btn-primary m-2'>Review schreiben</a>
+                <a href='v.php?pid=$project[ID]' class='col btn btn-primary m-2'>Review schreiben</a>
             </div>
         </div>";
         //display the opinions of other users, excluding those of admins
@@ -72,7 +73,7 @@ if(isset($_GET['pid'])){
                         <h3 class='col-8'>$p[title]</h3>
                         $s
                         </div   >
-                        <a href='/u.php?uid=$p[uid]' class='card-link'>$p[name]</a>
+                        <a href='u.php?uid=$p[uid]' class='card-link'>$p[name]</a>
                         <p>$p[review]</p>
                     </div>";
         }
@@ -102,7 +103,7 @@ if(isset($_GET['pid'])){
                             <h3 class='col-8'>$p[title]</h3>
                             $s
                             </div   >
-                            <a href='/u.php?uid=$p[uid]' class='card-link'>$p[name]</a>
+                            <a href='u.php?uid=$p[uid]' class='card-link'>$p[name]</a>
                             <p>$p[review]</p>
                         </div>";
                 }

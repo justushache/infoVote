@@ -8,10 +8,10 @@
 <body style='padding:15'>
 <ul class="nav nav-tabs mb-2">
   <li class="nav-item">
-    <a class="nav-link" href="/shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Homepage</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link" href="/addItem.php">add Item</a>
+    <a class="nav-link" href="addItem.php">add Item</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Benutzer</a>
@@ -22,8 +22,9 @@
 
 <div class="container-fluid pl-5 pr-5">
 <?php
+include_once 'validateInputText.php';
 if(isset($_GET['uid'])){
-  $uid = $_GET['uid'];
+  $uid = removeCriticalText($_GET['uid']);
   $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
   //chek if the uid is valid and get the username
