@@ -27,7 +27,6 @@ if(isset($_POST['pid'])&&isset($_POST['stars'])){
     }else{
         //the user did not vote yet, insert the entry
         $sql="INSERT INTO stars (pid,uid,stars) VALUES($pid,$uid,$stars)";
-        $pdo->query($sql);
     }
     
 

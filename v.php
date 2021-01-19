@@ -62,7 +62,7 @@
 <?php
 
   if(isset($_POST["title"])&&isset($_POST["review"])&&isset($_GET["pid"])&&
-    $_POST["title"]!=''&& $_POST["review"] !='' &&is_numeric($_GET["pid"])){
+    removeCriticalText($_POST["title"])!=''&& removeCriticalText($_POST["review"]) !='' &&is_numeric($_GET["pid"])){
       
     if(session_id() == '' || !isset($_SESSION)) {
         session_start();
@@ -92,21 +92,20 @@
     if($pdo->query($sql)->rowCount()>0){
         die ('sie dürfen nur ein Review pro Produkt schreiben');
     };
-
+	
     //put uid, title, review and pid in the database,
       $sql = 'INSERT INTO reviews (uid,title,review,pid) VALUES ("'
 	  .$uid.'","'
-	  .$_POST["title"].'","'
-	  .$_POST["review"].'","'
+	  .removeCriticalText($_POST["title"]).'","'
+	  .removeCriticalText($_POST["review"]).'","'
 	  .$pid.'")';
+	  
     $pdo->query($sql);
-    echo "<script>alert('HI')</script>";
+    echo "<script>alert('$sql')</script>";
     
     //redirect to the projekt
-    header('Location: shop.php');
+    //header('Location: shop.php');
   }else{
 	  echo("not all field are populated");
   }
 ?>
-
-</html>

@@ -23,6 +23,11 @@ echo getStarCSS();
 $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
 //sort by votes
+
+//table a is a table with all products joined on stars and admins where the uid is a admin
+//table u is a table with all products joined on stars and admins where the uid is not a admin
+//TODO: different star votes lead to double entries -> probably union
+
 $sqlPrep = "CREATE TEMPORARY TABLE a SELECT products.ID, stars.stars as adminStars FROM products INNER JOIN stars ON products.ID = stars.pid LEFT JOIN admin ON admin.uid = stars.uid WHERE admin.uid IS NOT NULL;
         CREATE TEMPORARY TABLE a1 SELECT * FROM a;
         CREATE TEMPORARY TABLE u SELECT products.ID, stars.stars as userStars FROM products INNER JOIN stars ON products.ID = stars.pid LEFT JOIN admin ON admin.uid = stars.uid WHERE admin.uid IS NULL;
@@ -31,6 +36,8 @@ $sqlPrep = "CREATE TEMPORARY TABLE a SELECT products.ID, stars.stars as adminSta
         UPDATE p SET aID = uID, adminStars = userStars WHERE aID IS NULL;
         UPDATE p SET uID = aID, userStars = adminStars WHERE uID IS NULL;";
 $sql = "SELECT * FROM products LEFT JOIN (SELECT aid as pid, (adminStars+userStars)/2 as avgStars FROM p)t ON t.pid = products.ID ORDER BY t.avgStars DESC;";
+
+//$sql = "SELECT * FROM p";
 
 $pdo->exec($sqlPrep);
 $rows = $pdo->query($sql)->fetchAll();
