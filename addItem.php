@@ -11,10 +11,10 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Startseite</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link active" href="">add Item</a>
+    <a class="nav-link active" href="">Projekt hinzufügen</a>
   </li>
   <?php include_once 'currentUser.php'; echo getUserNavbar()?>  
 </ul>
@@ -24,30 +24,30 @@
 <div class="input-group pt-3 w-75 mx-auto">
   <div class="custom-file">
     <input type="file" class="custom-file-input" id="fileToUpload" name="fileToUpload">
-    <label class="custom-file-label" for="fileToUpload">Choose file</label>
+    <label class="custom-file-label" for="fileToUpload">Datei auswählen</label>
   </div>
 
   <div class="form-group w-100 pt-1">
     <label for="name">Name</label>
-    <input type="text" class="form-control" name="name">
+    <input type="text" class="form-control" name="name" placeholder="Name des Produktes">
   </div>
   <div class="form-group w-100 pt-1">
-    <label for="manufacturer">manufacturer</label>
-    <input type="text" class="form-control" name="manufacturer">
+    <label for="manufacturer">Hersteller</label>
+    <input type="text" class="form-control" name="manufacturer" placeholder="Hersteller des Produktes">
   </div>
   <div class="form-group w-100 pt-1">
-    <label for="number">Number</label>
-    <input type="number" class="form-control" name="number">
+    <label for="number">Nummer</label>
+    <input type="number" class="form-control" name="number" placeholder="Justus fragen wofür das war">
   </div>
   <div class="form-group w-100 pt-1">
-    <label for="description">Description</label>
-    <input type="text" class="form-control" name="description">
+    <label for="description">Beschreibung</label>
+    <input type="text" class="form-control" name="description" placeholder="Produktbeschreibung">
   </div>
   <div class="form-group w-100 pt-1">
-    <label for="homepage">Homepage.php</label>
-    <input type="text" class="form-control" name="homepage">
+    <label for="homepage">Startseite</label>
+    <input type="text" class="form-control" name="homepage" placeholder="Addresse der Startseite hier eingeben">
   </div>
-  <button type="submit" class="btn btn-primary">Add a new item</button>
+  <input type="submit" name="submit" class="btn btn-primary" value="Produkt hinzufügen">
 </div>
 </form>
 
@@ -64,16 +64,27 @@
       session_start();
     }
     
+    //informs the user that he has to login, redirects him to login page
     if(!isset($_SESSION['id'])){
-      header('Location: index.php');
-      die('bitte erst anmelden');
+      echo "
+      <script>
+      if(window.confirm('Bitte erst anmelden')){
+        location.replace('index.php');
+      }
+        </script>";
+      die();
     }
 
     //check if session is valid
     include_once 'session.php';
     if(is_session_valid($_SESSION['id'])!=true){
-      header('Location: index.php');
-      die('sie wurden automatisch abgemeldet');
+      echo "
+      <script>
+      if(window.confirm('Sie wurden automatisch abgemeldet, bitte erneut anmelden')){
+        location.replace('index.php');
+      }
+        </script>";
+      die();
     }
 
     //gey uid
@@ -86,7 +97,7 @@
 	  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 	  $imagepath = round(microtime(true)*1000).$_POST["name"].".".$imageFileType;
 	  if(move_uploaded_file($_FILES['fileToUpload']['tmp_name'],"$target_dir/".$imagepath)==false){
-	  	echo "we had an error";
+	  	echo "<script> window.alert('Beim Upload des Bildes ist ein Fehler aufgetreten, bitte erneut versuchen!'); </script>";
 	  }
   
 	  //add product to database
@@ -102,9 +113,10 @@
     
     // redirect to shop.php
     header('Location: shop.php');
-  }elseif(isset($_POST["name"])||isset($_POST["manufacturer"])||isset($_POST["number"])||isset($_POST["description"])||isset($_POST["homepage"])||isset($_FILES["fileToUpload"])){
-    //only display error, if user sent data
-	  echo("not all field are populated");
+  }elseif(isset($_POST["submit"])){
+    //send message when user clicked on submit button, not all fields populated
+    echo "<script> window.alert('Bitte alle benötigten Felder ausfüllen!'); </script>";
+    die();
   }
 ?>
 

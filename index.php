@@ -12,13 +12,13 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Startseite</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" href="#">Login</a>
+    <a class="nav-link active" href="#">Anmelden</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="newUser.php">Add User</a>
+    <a class="nav-link" href="newUser.php">Registrieren</a>
   </li>
 </ul>
 
@@ -26,15 +26,15 @@
 
 <form method='post' action='index.php'>
   <div class="form-group">
-    <label for="name">Username</label>
+    <label for="name">Nutzername</label>
     <input type="text" class="form-control" name="name" aria-describedby="emailHelp" required>
   </div>
   <div class="form-group">
-    <label for="password">Password</label>
+    <label for="password">Passwort</label>
     <input type="password" class="form-control" name="password" required>
   </div>
   <div class="g-recaptcha" data-type="image" data-sitekey="6LejgesZAAAAALzGfNQWpDK3qipYQqacsPEOcJs5"></div>
-  <input type="submit" class="btn btn-primary">Log in</input>
+  <input type="submit" name="submit" class="btn btn-primary" value="Einloggen">
 </form>
 
 </content>
@@ -45,11 +45,13 @@
 		if(createSession(removeCriticalText($_POST['name']), removeCriticalText($_POST['password']))){
 			header('Location: shop.php');
 		}else{
-			echo 'your username or password is wrong';
+      echo "<script> window.alert('Nutzername oder Password falsch!'); </script>";
+      die();
 		}
-	//IF the user has only filled out one field, tell him that
-	}else{
-		echo'sie haben nicht alle Felder ausgefüllt';
+	}elseif(isset($_POST["submit"])){
+		//send message when user clicked on submit button, not all fields populated
+    echo "<script> window.alert('Bitte alle benötigten Felder ausfüllen!'); </script>";
+    die();
 	}
 ?>
 

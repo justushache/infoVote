@@ -8,10 +8,10 @@
 <body style='padding:15'>
 <ul class="nav nav-tabs mb-2">
   <li class="nav-item">
-    <a class="nav-link" href="shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Startseite</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link" href="addItem.php">add Item</a>
+    <a class="nav-link" href="addItem.php">Produkt hinzufügen</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Benutzer</a>
@@ -23,7 +23,7 @@
 <div class="container-fluid pl-5 pr-5">
 <?php
 include_once 'validateInputText.php';
-if(isset($_GET['uid'])){
+if(isset($_GET['uid']) && removeCriticalText($_GET["uid"]) != ''){
   $uid = removeCriticalText($_GET['uid']);
   $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
@@ -63,8 +63,8 @@ for($i=0;$i<count($rows);$i+=1){
         <h5 class="card-title">'.$rows[$i]["name"].'</h5>
         <h6 class="card-subtitle mb-2 text-muted">'.$manufacturer.'</h6>
         <p class="card-text">'.$rows[$i]["description"].'</p>
-        <a href="'.$rows[$i]['homepage'].'" class="card-link">Website</a>
-        <a href="#" class="card-link float-right">More</a>
+        <a href="'.$rows[$i]['homepage'].'" class="card-link">Zur Website</a>
+        <a href="#" class="card-link float-right">Mehr</a>
       </div>
     </div>
   </div>';

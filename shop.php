@@ -8,10 +8,10 @@
 <body style='padding:15'>
 <ul class="nav nav-tabs mb-2">
   <li class="nav-item">
-    <a class="nav-link active" href="#">Homepage</a>
+    <a class="nav-link active" href="#">Startseite</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link" href="/addItem.php">add Item</a>
+    <a class="nav-link" href="addItem.php">Projekt hinzufügen</a>
   </li>
   <?php include_once 'currentUser.php'; echo getUserNavbar()?>  
 </ul>
@@ -66,10 +66,10 @@ for($i=0;$i<count($rows);$i+=1){
           <h5 class='col-8 my-1 card-title'>$row[name]</h5>
           <div class='col-4'>".getStarHTMLToShow($row['avgStars'])."</div>
         </div>
-        <a href='/u.php?uid=$row[uid]' class='card-link'>$manufacturer</a>
+        <a href='u.php?uid=$row[uid]' class='card-link'>$manufacturer</a>
         <p class='card-text'>$row[description]</p>
-        <a href='$row[homepage]' class='card-link'>Website</a>
-        <a href='/p.php?pid=$row[ID]' class='card-link float-right'>More</a>
+        <a href='$row[homepage]' class='card-link'>Zur Website</a>
+        <a href='p.php?pid=$row[ID]' class='card-link float-right'>Mehr</a>
       </div>
     </div>
   </div>";

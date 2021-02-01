@@ -5,13 +5,13 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-<body class="bg-light">
+<body class="bg-light" style='padding:15'>
 <ul class="nav nav-tabs mb-2 bg-white">
   <li class="nav-item">
-    <a class="nav-link" href="shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Startseite</a>
   </li>
   <li class="nav-item  justify-content-end">
-    <a class="nav-link" href="addItem.php">add Item</a>
+    <a class="nav-link" href="addItem.php">Projekt hinzufügen</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="#">Projekt</a>
@@ -52,7 +52,7 @@ if(isset($_GET['pid'])){
         //a row with buttons to write a review (new page) and to go to the website
         echo    "<div class='card col-sm my-2'>
             <div class='row'>
-                <a href='$project[homepage]' class='col btn btn-primary m-2'>Zu der Website</a>
+                <a href='$project[homepage]' class='col btn btn-primary m-2'>Zur Website</a>
                 <a href='v.php?pid=$project[ID]' class='col btn btn-primary m-2'>Review schreiben</a>
             </div>
         </div>";

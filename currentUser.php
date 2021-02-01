@@ -18,7 +18,7 @@
           return '';
         }
         
-        //gey uid
+        //get uid
         $uid = $_SESSION['uid'];
         $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
         $sql = 'SELECT name FROM users WHERE ID ='.$_SESSION["uid"];
@@ -34,16 +34,16 @@
         //the card linking to the user profile
         $returnString =$returnString.'
         <li class="nav-item">
-          <a class="nav-link" href="/u.php?uid='.$user[0].'">
+          <a class="nav-link" href="u.php?uid='.$user[0].'">
             <u>'.$user[1].'</u>
           </a>
         </li>';
         }   
-        $cardLink = '/index.php';
-        $cardTitle = 'Login';   
+        $cardLink = 'index.php';
+        $cardTitle = 'Anmelden';   
         if($user!=''){
-          $cardLink = '/logout.php';
-          $cardTitle = 'Logout';
+          $cardLink = 'logout.php';
+          $cardTitle = 'Abmelden';
         }   
         //the card which is used for logout, and login depending on if there is a user
         $returnString =$returnString.'

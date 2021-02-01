@@ -8,13 +8,13 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link" href="shop.php">Homepage</a>
+    <a class="nav-link" href="shop.php">Startseite</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="index.php">Login</a>
+    <a class="nav-link" href="index.php">Anmelden</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link active" href="#">Add User</a>
+    <a class="nav-link active" href="#">Registrieren</a>
   </li>
 </ul>
 
@@ -22,16 +22,16 @@
 
 <form method="POST">
   <div class="form-group">
-    <label for="name">Username</label>
+    <label for="name">Nutzername</label>
     <input type="text" class="form-control" name="name" aria-describedby="emailHelp">
     <small id="emailHelp" class="form-text text-muted">Ihr Name ist bei uns fast sicher</small>
   </div>
   <div class="form-group">
-    <label for="password">Password</label>
+    <label for="password">Passwort</label>
     <input type="password" class="form-control" name="password" aria-describedby="pwdHelp">
     <small id="pwdHelp" class="form-text text-muted">Ihr Passwort ist bei uns definitiv nicht sicher</small>
   </div>
-  <button type="submit" class="btn btn-primary">Create new User</button>
+  <input type="submit" name="submit" class="btn btn-primary" value="Registrieren">
 </form>
 
 </content>
@@ -57,10 +57,10 @@ if ($conn->connect_error) {
 
 //check if username exists
 $sql = "SELECT password,ID FROM `users` WHERE name='$username'";
-echo $sql;
 $result = $conn->query($sql);
 if($result->num_rows >0){
-  die('your username is already taken');
+  echo "<script> window.alert('Dieser Nutzername wird bereits benutzt. Bitte sei kreativ oder hänge eine Bedeutungslose Zahl dahinter'); </script>";
+  die();
 }
 
 //insert user into database
@@ -75,10 +75,15 @@ if($result){
 	createSession($username,$userPassword);
   header("Location: shop.php");
 }else{
-	echo"Ihr Benutzer konnte leider nicht angelegt werden";
+  echo "<script> window.alert('Beim anlegen des Benutzers trat ein Fehler auf! Bitte erneut versuchen (oder den nie anwesenden Systemadministrator fragen)'); </script>";
+  die();
 }
 
 $conn->close();
+}elseif(isset($_POST["submit"])){
+  //send message when user clicked on submit button, not all fields populated
+  echo "<script> window.alert('Bitte alle benötigten Felder ausfüllen!'); </script>";
+  die();
 }
 ?>
 

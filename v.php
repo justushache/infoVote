@@ -55,7 +55,7 @@
     <label for="review">Review</label>
     <textarea class="form-control" aria-label="With textarea" name='review'></textarea>
   </div>
-  <button type="submit" class="btn btn-primary">Review absenden</button>
+  <input type="submit" name="submit" class="btn btn-primary" value="Review absenden">
 </div>
 </form>
 
@@ -63,34 +63,52 @@
 
   if(isset($_POST["title"])&&isset($_POST["review"])&&isset($_GET["pid"])&&
     removeCriticalText($_POST["title"])!=''&& removeCriticalText($_POST["review"]) !='' &&is_numeric($_GET["pid"])){
-      
     if(session_id() == '' || !isset($_SESSION)) {
         session_start();
     }
 
     //check if log in was performed
     if(!isset($_SESSION['id'])){
-      header('Location: index.php');
-      die('bitte erst anmelden');
+      echo "
+      <script>
+      if(window.confirm('Bitte erst anmelden')){
+        location.replace('index.php');
+      }
+        </script>";
+      die();
     }
 
     //check if session is valid
     include_once 'session.php';
     if(is_session_valid($_SESSION['id'])!=true){
-      header('Location: index.php');
-      die('sie wurden automatisch abgemeldet');
+      echo "
+      <script>
+      if(window.confirm('Sie wurden automatisch abgemeldet, bitte erneut anmelden')){
+        location.replace('index.php');
+      }
+        </script>";
+      die();
     }
 
-    //gey uid
-    $uid = $_SESSION['uid'];
+    //get uid
+    $uid = removeCriticalText($_SESSION['uid']);
     $pid = removeCriticalText($_GET['pid']);
+
+    //sets default stars to zero, if no star rating is set by user
+    $stars = 0;
+    if(isset($_POST["rating"])){
+      $stars = removeCriticalText($_POST["rating"]);
+    }
+    //call function in star.php to update / insert stars
+    echo"<script> updateStars(" . $stars . ", " . $pid . ");</script>";
 
     $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
     //check if the user didnt write a review already  
     $sql = "SELECT ID from reviews WHERE uid ='$uid' AND pid = '$pid'";
     if($pdo->query($sql)->rowCount()>0){
-        die ('sie dürfen nur ein Review pro Produkt schreiben');
+      echo "<script> window.alert('Sie dürfen nur ein Review pro Projekt schreiben!') </script>";
+      die ();
     };
 	
     //put uid, title, review and pid in the database,
@@ -101,11 +119,12 @@
 	  .$pid.'")';
 	  
     $pdo->query($sql);
-    echo "<script>alert('$sql')</script>";
-    
-    //redirect to the projekt
-    //header('Location: shop.php');
-  }else{
-	  echo("not all field are populated");
+
+    //redirect to the project
+    header('Location: shop.php');
+  }elseif(isset($_POST["submit"])){
+	 //send message when user clicked on submit button, not all fields populated
+   echo "<script> window.alert('Bitte alle benötigten Felder ausfüllen!'); </script>";
+   die();
   }
 ?>

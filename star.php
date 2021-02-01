@@ -47,8 +47,7 @@ function getStarHTMLToVote($pid){
         }
 
         for($i=5;$i>0;$i--){
-            echo "<input type='radio' name='rating' value=$i id=$i onclick='updateStars($i,$pid)' $disabled><label for=$i $color style='font-size:5vw'>☆</label>
-            ";
+            echo "<input type='radio' name='rating' value=$i id=$i $disabled><label for=$i $color style='font-size:5vw'>☆</label>";
         }
     echo "</div>";
 }
@@ -106,7 +105,7 @@ function getStarJS()
 <script>
     function updateStars(stars, pid){
         let xhttp = new XMLHttpRequest();
-        xhttp.open('POST','/star.php',true);
+        xhttp.open('POST','star.php',true);
         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
         xhttp.onreadystatechange  = function(){
