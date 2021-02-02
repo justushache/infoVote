@@ -36,16 +36,12 @@
     <input type="text" class="form-control" name="manufacturer" placeholder="Hersteller des Produktes">
   </div>
   <div class="form-group w-100 pt-1">
-    <label for="number">Nummer</label>
-    <input type="number" class="form-control" name="number" placeholder="Justus fragen wofür das war">
-  </div>
-  <div class="form-group w-100 pt-1">
     <label for="description">Beschreibung</label>
     <input type="text" class="form-control" name="description" placeholder="Produktbeschreibung">
   </div>
   <div class="form-group w-100 pt-1">
     <label for="homepage">Startseite</label>
-    <input type="text" class="form-control" name="homepage" placeholder="Addresse der Startseite hier eingeben">
+    <input type="text" class="form-control" name="homepage" placeholder="Addresse der Startseite hier eingeben ,IP's bitte mit Protokoll (z.B. http://127.0.0.1 nicht nur 127.0.0.1)">
   </div>
   <input type="submit" name="submit" class="btn btn-primary" value="Produkt hinzufügen">
 </div>
@@ -53,8 +49,8 @@
 
 <?php
  include_once 'validateInputText.php';
-  if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["number"])&&isset($_POST["description"])&&isset($_POST["homepage"])&&$_FILES["fileToUpload"]&&
-  removeCriticalText($_POST["name"])!=''&&removeCriticalText($_POST["manufacturer"])!=''&&removeCriticalText($_POST["number"])!=''&&removeCriticalText($_POST["description"])!=''&&removeCriticalText($_POST["homepage"])){
+  if(isset($_POST["name"])&&isset($_POST["manufacturer"])&&isset($_POST["description"])&&isset($_POST["homepage"])&&$_FILES["fileToUpload"]&&
+  removeCriticalText($_POST["name"])!=''&&removeCriticalText($_POST["manufacturer"])!=''&&removeCriticalText($_POST["description"])!=''&&removeCriticalText($_POST["homepage"])){
     //for some reason empty fields are now empty strings, so check for that
 
     //check if log in was performed
@@ -102,10 +98,9 @@
   
 	  //add product to database
       $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
-      $sql = 'INSERT INTO products (name, uid,number,description,imagepath,homepage) VALUES ("'
+      $sql = 'INSERT INTO products (name, uid,description,imagepath,homepage) VALUES ("'
 	  .removeCriticalText($_POST["name"]).'","'
 	  .$uid.'","'
-	  .removeCriticalText($_POST["number"]).'","'
 	  .removeCriticalText($_POST["description"]).'","'
 	  .$imagepath.'","'
 	  .removeCriticalText($_POST["homepage"]).'")';

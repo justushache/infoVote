@@ -41,10 +41,12 @@
 <?php
   include_once 'validateInputText.php';
 	if(isset($_POST['name']) && removeCriticalText($_POST['name']) != '' && isset($_POST['password']) && removeCriticalText($_POST['password'])){
-		include 'session.php';
+    include 'session.php';
 		if(createSession(removeCriticalText($_POST['name']), removeCriticalText($_POST['password']))){
+      //redirect to shop
 			header('Location: shop.php');
 		}else{
+      //tell user their login data was wrong
       echo "<script> window.alert('Nutzername oder Password falsch!'); </script>";
       die();
 		}
