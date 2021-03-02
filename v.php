@@ -10,7 +10,6 @@
 <?php
     include_once 'star.php';
     echo getStarCSS();
-    echo getStarJS();
 ?>
 
 
@@ -94,14 +93,6 @@
     $uid = removeCriticalText($_SESSION['uid']);
     $pid = removeCriticalText($_GET['pid']);
 
-    //sets default stars to zero, if no star rating is set by user
-    $stars = 0;
-    if(isset($_POST["rating"])){
-      $stars = removeCriticalText($_POST["rating"]);
-    }
-    //call function in star.php to update / insert stars
-    echo"<script> updateStars(" . $stars . ", " . $pid . ");</script>";
-
     $pdo = new PDO('mysql:host=localhost;dbname=signin', 'root', '');
 
     //check if the user didnt write a review already  
@@ -110,6 +101,27 @@
       echo "<script> window.alert('Sie dürfen nur ein Review pro Projekt schreiben!') </script>";
       die ();
     };
+	
+	//sets default stars to zero, if no star rating is set by user
+    $stars = 0;
+    if(isset($_POST["rating"])){
+      $stars = removeCriticalText($_POST["rating"]);
+    }
+	
+	    // check, if the user did already vote
+    $sql =  "SELECT ID from stars WHERE pid = $pid AND uid = $uid";
+    echo $sql;
+    $result = $pdo->query($sql);
+    if($result->rowCount()>0){
+        // the user did already vote, update the entry
+        $sql="UPDATE stars SET stars=$stars WHERE pid = $pid AND uid = $uid";
+    }else{
+        //the user did not vote yet, insert the entry
+        $sql="INSERT INTO stars (pid,uid,stars) VALUES($pid,$uid,$stars)";
+    }
+    
+
+    $pdo->query($sql);
 	
     //put uid, title, review and pid in the database,
       $sql = 'INSERT INTO reviews (uid,title,review,pid) VALUES ("'
