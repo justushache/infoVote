@@ -35,7 +35,7 @@ $sqlPrep = "CREATE TEMPORARY TABLE a SELECT products.ID, stars.stars as adminSta
             UPDATE p SET uID = aID, userStars = adminStars WHERE uID IS NULL;";
 
   //actually gets the projects, uses the table p to sort the list.
-$sql = "SELECT * FROM products LEFT JOIN (SELECT aid as pid, (adminStars+userStars)/2 as avgStars FROM p)t ON t.pid = products.ID ORDER BY t.avgStars DESC;";
+$sql = "SELECT * FROM products LEFT JOIN (SELECT aid as pid, ROUND((adminStars+userStars)/2,0) as avgStars FROM p)t ON t.pid = products.ID ORDER BY t.avgStars DESC;";
 
 
 $pdo->exec($sqlPrep);
